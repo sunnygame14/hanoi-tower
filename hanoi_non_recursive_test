@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+//編譯器 Dev-C++ 5.11  TDM-GCC 4.9.2 64-bit Release 
+//2018/10/15 
+inline bool two(int i) //判斷數字是否為2的冪次方 
+{
+    if (i < 1) return false;
+    return (i & (i - 1)) == 0;
+}
+
+int cal_k(int n){ //回傳演算法需要的 i=n^k * y 的 k值 
+	int k=0;
+	double n1=n;
+	if(two(n)==1){
+		return int(log2(n1));
+	}
+	else{
+		for(int i=n;;){
+			if(n%2==0){
+				n=n/2;
+				k++;
+			}else{
+				return k;
+			}
+		}
+	}
+}
+
+int main(void){
+	int n;
+	do{
+		cout << "輸入河內塔的碟子數 n : ";
+		cin >> n;
+	}while(n==0);
+	cout << "且碟子編號為{1 , 2 , ..... , n},柱子標號為{0 1 2}" << endl;
+	int pos[n+1]={0};
+
+	for(int i=1;i<=pow(2,n)-1;i++){
+		if(n%2==0){ //n為偶數 
+			if((cal_k(i)+1)%2==0){ //k+1為偶數 
+				cout << "Step " << i << ": 移動" << cal_k(i)+1 << "號碟子 從柱子" << pos[cal_k(i)+1] << "到柱子" << (pos[cal_k(i)+1]-1+3)%3 << endl;  
+				pos[cal_k(i)+1]=(pos[cal_k(i)+1]-1+3)%3;
+			}else{			   //k+1為奇數  
+				cout << "Step " << i << ": 移動" << cal_k(i)+1 << "號碟子 從柱子" << pos[cal_k(i)+1] << "到柱子" << (pos[cal_k(i)+1]+1)%3 << endl;
+				pos[cal_k(i)+1]=(pos[cal_k(i)+1]+1)%3;
+			}
+		}else if(n%2!=0){ //n為奇數 
+			if((cal_k(i)+1)%2==0){ //k+1為偶數 
+				cout << "Step " << i << ": 移動" << cal_k(i)+1 << "號碟子 從柱子" << pos[cal_k(i)+1] << "到柱子" << (pos[cal_k(i)+1]+1)%3 << endl;
+				pos[cal_k(i)+1]=(pos[cal_k(i)+1]+1)%3; 
+			}else{             //k+1為奇數 
+				cout << "Step " << i << ": 移動" << cal_k(i)+1 << "號碟子 從柱子" << pos[cal_k(i)+1] << "到柱子" << (pos[cal_k(i)+1]-1+3)%3 << endl;
+				pos[cal_k(i)+1]=(pos[cal_k(i)+1]-1+3)%3;
+			}
+		}
+	}
+	return 0;
+} 
